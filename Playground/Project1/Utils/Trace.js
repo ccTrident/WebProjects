@@ -11,12 +11,36 @@ module.exports = {
     console.log(message);
     },
     tracingId : 0,
-    traceLocation: function(){
+    traceLocation: function(optMsg){
         var c = callerId.getData();
         var fileName = path.basename(c.filePath);
-        console.log("["+this.tracingId++ + "] At function: "+c.functionName+". "+fileName+", Line: " +c.lineNumber +".");
+        this.log("["+this.tracingId++ + "] At function: "+c.functionName+". "+fileName+", Line: " +c.lineNumber +".");
+        if (optMsg !== undefined) {
+            this.log("\tMessage: " + optMsg)
+        }
+    },
+    traceMessage: function(msg){
+        this.log("["+this.tracingId++ + "] Message: " + msg);
     },
 
+    traceFunction: function(msg){
+        var c = callerId.getData();
+        if (msg === undefined){ msg=""}
+        this.log("["+this.tracingId++ + "] "+ c.functionName+"(): "+msg+".");
+    },
+
+    traceJsFileStart: function(){
+        var c = callerId.getData();
+        var fileName = path.basename(c.filePath);
+        this.log("["+this.tracingId++ + "] JS START: "+fileName.substr(0, fileName.length -3));
+    },
+
+    traceJsFileEnd: function(){
+        var c = callerId.getData();
+        var fileName = path.basename(c.filePath);
+        this.log("["+this.tracingId++ + "] JS END: "+fileName.substr(0, fileName.length -3));
+    },
+    /***
     fileStartMarkerLegacy: function(fileName){
         fileName = path.basename(fileName);
         console.log("====== Start of "+fileName+" ======");
@@ -41,4 +65,5 @@ module.exports = {
         }
         console.log("[+] Quiting function "+previousCaller);
     }
+     **/
 };
